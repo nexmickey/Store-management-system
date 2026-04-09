@@ -3,7 +3,7 @@ A microservice-based e-commerce platform built with **Flask**, **MySQL**, **Dock
 
 
 
-## Tech Stack
+## 💻 Tech Stack
 - **Backend:** Python 3, Flask, Flask-SQLAlchemy, Flask-Migrate, Flask-JWT-Extended
 - **Databases:** MySQL (via PyMySQL)
 - **Blockchain:** Solidity 0.8.18, Web3.py, Ganache CLI
@@ -12,7 +12,7 @@ A microservice-based e-commerce platform built with **Flask**, **MySQL**, **Dock
 
 
 
-## Getting Started
+## 🚀 Getting Started
 ### 1. Start all services (development mode)
 ```bash
 docker compose -f development.yaml up
@@ -31,7 +31,7 @@ docker compose -f development.yaml down --volumes --remove-orphans
 
 
 
-## Local Install
+## ⬇️ Local Install
 ```bash
 python -m venv venv
 venv\Scripts\activate
@@ -42,7 +42,7 @@ Ensure MySQL is running locally on port 3306 and Ganache on port 8545.
 
 
 
-## Running Tests
+## 📶 Running Tests
 ```bash
 python run.sh
 ```
@@ -56,7 +56,7 @@ python MyTests/delete_data.py
 ```
 
 
-## Database
+## 📊 Database
 
 ### Migrations
 ```bash
@@ -77,13 +77,13 @@ Access at [http://localhost:8080](http://localhost:8080) when containers are run
 
 
 
-## Blockchain / Smart Contract
+## 💸 Blockchain / Smart Contract
 ### Compile the Solidity Contract (after contract change)
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File .\compile.ps1 -file_path "DeliveryContract.sol"
 ```
 
-### Generate Ethereum Keystore
+### 🗝️ Generate Ethereum Keystore
 ```bash
 python keystore_generator.py
 ```
@@ -92,7 +92,7 @@ Generated file needs to be moved to Shop/source_common.
 
 
 
-## Architecture Overview
+## 🔧 Architecture Overview
 The system is composed of multiple Docker containers orchestrated via Docker Compose:
 | Service          | Port  | Description                                      |
 |------------------|-------|--------------------------------------------------|
@@ -107,7 +107,7 @@ The system is composed of multiple Docker containers orchestrated via Docker Com
 
 
 
-## API Endpoints
+## ⚙️ API Endpoints
 
 ### Authentication Service (port 5000)
 | Method | Endpoint              | Description                     | Auth |
@@ -141,7 +141,7 @@ The system is composed of multiple Docker containers orchestrated via Docker Com
 
 
 
-## Database Schema
+## 📊 Database Schema
 
 ### Auth Database (`users`)
 
