@@ -1,0 +1,140 @@
+volumes:
+  auth-mysql-storedata:
+  shop-mysql-storedata:
+
+networks:
+  auth-net:
+  shop-net:
+
+services:
+  # Database services
+  auth-db:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=users
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - auth-mysql-storedata:/var/lib/mysql
+    networks:
+      - auth-net
+
+  shop-db:
+    image: mysql
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=shops
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - shop-mysql-storedata:/var/lib/mysql
+    networks:
+      - shop-net
+
+  # Adminer service
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - auth-net
+      - shop-net
+
+  # Ganache
+  ganache:
+    image: trufflesuite/ganache-cli
+    ports:
+      - 8545:8545
+    networks:
+      - shop-net
+      
+  # Application services
+  auth-app:
+    image: auth-image
+    build:
+      context: ./Authentication
+      dockerfile: auth.dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=auth-db
+      - FLASK_DEBUG=false
+      - JWT_SECRET_KEY=JWT_SECRET_DEV_KEY
+      - IS_DOCKER=true
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    networks:
+      - auth-net
+
+  owner-app:
+    image: owner-image
+    build:
+      context: ./Shop
+      dockerfile: owner.dockerfile
+    ports:
+      - 5001:5000
+    environment:
+      - DATABASE_URL=shop-db
+      - FLASK_DEBUG=false
+      - JWT_SECRET_KEY=JWT_SECRET_DEV_KEY
+      - WITH_BLOCKCHAIN=true
+      - BLOCKCHAIN_URL=http://ganache:8545
+      - IS_DOCKER=true
+    depends_on:
+      shop-db:
+        condition: service_healthy
+    networks:
+      - shop-net
+
+  customer-app:
+    image: customer-image
+    build:
+      context: ./Shop
+      dockerfile: customer.dockerfile
+    ports:
+      - 5002:5000
+    environment:
+      - DATABASE_URL=shop-db
+      - FLASK_DEBUG=false
+      - JWT_SECRET_KEY=JWT_SECRET_DEV_KEY
+      - WITH_BLOCKCHAIN=true
+      - BLOCKCHAIN_URL=http://ganache:8545
+      - IS_DOCKER=true
+    depends_on:
+      shop-db:
+        condition: service_healthy
+    networks:
+      - shop-net
+
+  courier-app:
+    image: courier-image
+    build:
+      context: ./Shop
+      dockerfile: courier.dockerfile
+    ports:
+      - 5003:5000
+    environment:
+      - DATABASE_URL=shop-db
+      - FLASK_DEBUG=false
+      - JWT_SECRET_KEY=JWT_SECRET_DEV_KEY
+      - WITH_BLOCKCHAIN=true
+      - BLOCKCHAIN_URL=http://ganache:8545
+      - IS_DOCKER=true
+    depends_on:
+      shop-db:
+        condition: service_healthy
+    networks:
+      - shop-net
+      
