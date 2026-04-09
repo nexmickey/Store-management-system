@@ -1,6 +1,6 @@
 USE users;
 
-DELETE FROM `user` WHERE id >= 1;
-ALTER TABLE `user` AUTO_INCREMENT = 1;
---DELETE FROM `user` WHERE id >= 2;
---ALTER TABLE `user` AUTO_INCREMENT = 2;
+--DELETE FROM `user` WHERE id >= 1;
+--ALTER TABLE `user` AUTO_INCREMENT = 1;
+DELETE FROM `user` WHERE id >= 2;
+ALTER TABLE `user` AUTO_INCREMENT = 2;
